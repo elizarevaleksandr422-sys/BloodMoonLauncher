@@ -1,6 +1,7 @@
 package com.bloodmoon.launcher
 
 import android.content.Context
+import android.util.AttributeSet
 import android.graphics.Canvas
 import android.graphics.Paint
 import android.graphics.RadialGradient
@@ -9,7 +10,11 @@ import android.view.View
 import kotlin.math.sin
 import kotlin.random.Random
 
-class BloodParticlesView(context: Context) : View(context) {
+class BloodParticlesView @JvmOverloads constructor(
+    context: Context,
+    attrs: AttributeSet? = null,
+    defStyleAttr: Int = 0
+) : View(context, attrs, defStyleAttr) {
 
     private data class Particle(
         var x: Float,
@@ -21,10 +26,9 @@ class BloodParticlesView(context: Context) : View(context) {
     )
 
     private val paint = Paint(Paint.ANTI_ALIAS_FLAG)
+    private val fogPaint = Paint(Paint.ANTI_ALIAS_FLAG)
 
     private val particles = mutableListOf<Particle>()
-
-    private val fogPaint = Paint(Paint.ANTI_ALIAS_FLAG)
 
     private var time = 0f
 
@@ -48,10 +52,14 @@ class BloodParticlesView(context: Context) : View(context) {
     override fun onDraw(canvas: Canvas) {
         super.onDraw(canvas)
 
-        time += 1f
-
         val width = width.toFloat()
         val height = height.toFloat()
+
+        if (width <= 0f || height <= 0f) {
+            return
+        }
+
+        time += 1f
 
         // Кровавый туман
         val fogGradient = RadialGradient(
@@ -69,7 +77,14 @@ class BloodParticlesView(context: Context) : View(context) {
         )
 
         fogPaint.shader = fogGradient
-        canvas.drawRect(0f, 0f, width, height, fogPaint)
+
+        canvas.drawRect(
+            0f,
+            0f,
+            width,
+            height,
+            fogPaint
+        )
 
         // Частицы
         particles.forEach { particle ->
@@ -81,11 +96,14 @@ class BloodParticlesView(context: Context) : View(context) {
                 particle.x = Random.nextFloat()
             }
 
-            val wave =
-                sin(time * 0.01f + particle.phase) * 18f
+            val wave = sin(
+                time * 0.01f + particle.phase
+            ) * 18f
 
             val px = particle.x * width + wave
             val py = particle.y * height
+
+            paint.shader = null
 
             paint.color =
                 (particle.alpha shl 24) or 0x00D91B36
@@ -105,7 +123,9 @@ class BloodParticlesView(context: Context) : View(context) {
             )
         }
 
-        // Тёмный нижний туман
+        paint.clearShadowLayer()
+
+        // Нижний тёмный туман
         val bottomFog = RadialGradient(
             width * 0.5f,
             height,
@@ -128,6 +148,8 @@ class BloodParticlesView(context: Context) : View(context) {
             height,
             fogPaint
         )
+
+        fogPaint.shader = null
 
         postInvalidateOnAnimation()
     }
