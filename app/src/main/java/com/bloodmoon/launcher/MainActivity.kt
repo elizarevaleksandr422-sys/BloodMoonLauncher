@@ -8,7 +8,6 @@ import android.os.Bundle
 import android.view.animation.AccelerateDecelerateInterpolator
 import android.widget.Button
 import android.widget.ImageView
-import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 
 class MainActivity : AppCompatActivity() {
@@ -26,7 +25,7 @@ class MainActivity : AppCompatActivity() {
         val playButton = findViewById<Button>(R.id.playButton)
         val settingsButton = findViewById<Button>(R.id.settingsButton)
 
-        // 🌑 Пульсация кровавой Луны
+        // Пульсация кровавой Луны
         moonPulse = ObjectAnimator.ofFloat(
             moon,
             "alpha",
@@ -40,7 +39,7 @@ class MainActivity : AppCompatActivity() {
             start()
         }
 
-        // 🌑 Плавное движение Луны
+        // Плавное движение Луны
         moonFloat = ObjectAnimator.ofFloat(
             moon,
             "translationY",
@@ -54,7 +53,7 @@ class MainActivity : AppCompatActivity() {
             start()
         }
 
-        // 🔴 Пульсация кнопки ИГРАТЬ
+        // Пульсация кнопки ИГРАТЬ
         buttonPulse = ObjectAnimator.ofPropertyValuesHolder(
             playButton,
             PropertyValuesHolder.ofFloat(
@@ -76,17 +75,18 @@ class MainActivity : AppCompatActivity() {
             start()
         }
 
-        // ▶ ИГРАТЬ
+        // ИГРАТЬ
         playButton.setOnClickListener {
 
-            Toast.makeText(
+            val intent = Intent(
                 this,
-                "Запуск Minecraft 1.16.5...",
-                Toast.LENGTH_SHORT
-            ).show()
+                GameActivity::class.java
+            )
+
+            startActivity(intent)
         }
 
-        // ⚙ НАСТРОЙКИ
+        // НАСТРОЙКИ
         settingsButton.setOnClickListener {
 
             val intent = Intent(
