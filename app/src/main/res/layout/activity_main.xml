@@ -6,7 +6,19 @@
     android:layout_height="match_parent"
     android:background="@drawable/bg_launcher">
 
-    <!-- Центральная часть -->
+    <!-- Кровавая Луна -->
+
+    <ImageView
+        android:id="@+id/bloodMoon"
+        android:layout_width="300dp"
+        android:layout_height="300dp"
+        android:layout_gravity="top|center_horizontal"
+        android:layout_marginTop="45dp"
+        android:src="@drawable/blood_moon"
+        android:contentDescription="Blood Moon"
+        android:scaleType="fitCenter" />
+
+    <!-- Центральный интерфейс -->
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -14,7 +26,8 @@
         android:layout_gravity="center"
         android:orientation="vertical"
         android:gravity="center"
-        android:padding="28dp">
+        android:padding="28dp"
+        android:layout_marginTop="130dp">
 
         <TextView
             android:layout_width="wrap_content"
@@ -42,7 +55,7 @@
             android:id="@+id/playButton"
             android:layout_width="260dp"
             android:layout_height="65dp"
-            android:layout_marginTop="55dp"
+            android:layout_marginTop="45dp"
             android:text="ИГРАТЬ"
             android:textColor="#FFFFFF"
             android:textSize="17sp"
