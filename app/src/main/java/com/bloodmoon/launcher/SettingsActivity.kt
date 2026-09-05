@@ -5,10 +5,10 @@ import android.graphics.Color
 import android.graphics.drawable.GradientDrawable
 import android.os.Bundle
 import android.view.Gravity
-import android.view.View
 import android.widget.Button
 import android.widget.EditText
 import android.widget.LinearLayout
+import android.widget.ScrollView
 import android.widget.SeekBar
 import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
@@ -18,7 +18,6 @@ class SettingsActivity : AppCompatActivity() {
     private val prefsName = "bloodmoon_settings"
 
     private val red = Color.rgb(215, 25, 53)
-    private val darkRed = Color.rgb(80, 8, 22)
     private val background = Color.rgb(5, 3, 8)
     private val card = Color.rgb(18, 7, 13)
     private val white = Color.rgb(240, 235, 238)
@@ -32,11 +31,24 @@ class SettingsActivity : AppCompatActivity() {
             Context.MODE_PRIVATE
         )
 
+        // Основной ScrollView
+        val scroll = ScrollView(this)
+
+        scroll.setBackgroundColor(background)
+
+        // Контейнер
         val root = LinearLayout(this)
 
         root.orientation = LinearLayout.VERTICAL
-        root.setBackgroundColor(background)
-        root.setPadding(24, 35, 24, 24)
+        root.setPadding(22, 28, 22, 28)
+
+        scroll.addView(
+            root,
+            ScrollView.LayoutParams(
+                ScrollView.LayoutParams.MATCH_PARENT,
+                ScrollView.LayoutParams.WRAP_CONTENT
+            )
+        )
 
         // Заголовок
         val title = TextView(this)
@@ -44,13 +56,13 @@ class SettingsActivity : AppCompatActivity() {
         title.text = "BLOODMOON"
         title.textSize = 30f
         title.setTextColor(red)
-        title.setGravity(Gravity.CENTER)
+        title.gravity = Gravity.CENTER
 
         root.addView(
             title,
             LinearLayout.LayoutParams(
-                -1,
-                55
+                LinearLayout.LayoutParams.MATCH_PARENT,
+                60
             )
         )
 
@@ -60,31 +72,35 @@ class SettingsActivity : AppCompatActivity() {
         subtitle.text = "НАСТРОЙКИ ЛАУНЧЕРА"
         subtitle.textSize = 12f
         subtitle.setTextColor(gray)
-        subtitle.setGravity(Gravity.CENTER)
+        subtitle.gravity = Gravity.CENTER
 
         root.addView(
             subtitle,
             LinearLayout.LayoutParams(
-                -1,
+                LinearLayout.LayoutParams.MATCH_PARENT,
                 35
             )
         )
 
-        // Карточка профиля
+        // =========================
+        // ПРОФИЛЬ
+        // =========================
+
         val profileCard = createCard()
 
-        val profileTitle = createLabel("ПРОФИЛЬ")
-
-        profileCard.addView(profileTitle)
+        profileCard.addView(
+            createLabel("ПРОФИЛЬ")
+        )
 
         val nickname = EditText(this)
 
         nickname.hint = "Введите никнейм"
         nickname.textSize = 17f
         nickname.setTextColor(white)
-        nickname.setHintTextColor(Color.rgb(90, 80, 85))
+        nickname.setHintTextColor(
+            Color.rgb(100, 90, 95)
+        )
         nickname.setSingleLine(true)
-        nickname.setPadding(18, 0, 18, 0)
 
         nickname.setText(
             prefs.getString("nickname", "")
@@ -95,9 +111,16 @@ class SettingsActivity : AppCompatActivity() {
             14
         )
 
+        nickname.setPadding(
+            18,
+            0,
+            18,
+            0
+        )
+
         val nicknameParams = LinearLayout.LayoutParams(
-            -1,
-            58
+            LinearLayout.LayoutParams.MATCH_PARENT,
+            60
         )
 
         nicknameParams.topMargin = 12
@@ -112,32 +135,34 @@ class SettingsActivity : AppCompatActivity() {
             cardParams()
         )
 
-        // Карточка ОЗУ
+        // =========================
+        // ОЗУ
+        // =========================
+
         val ramCard = createCard()
 
-        val ramTitle = createLabel("ОПЕРАТИВНАЯ ПАМЯТЬ")
+        ramCard.addView(
+            createLabel("ОПЕРАТИВНАЯ ПАМЯТЬ")
+        )
 
-        ramCard.addView(ramTitle)
-
-        val currentRam = prefs.getInt("ram", 2)
+        val currentRam = prefs.getInt(
+            "ram",
+            2
+        ).coerceIn(1, 8)
 
         val ramValue = TextView(this)
 
         ramValue.text = "$currentRam ГБ"
-        ramValue.textSize = 20f
+        ramValue.textSize = 22f
         ramValue.setTextColor(red)
         ramValue.gravity = Gravity.CENTER
 
-        val ramValueParams = LinearLayout.LayoutParams(
-            -1,
-            45
-        )
-
-        ramValueParams.topMargin = 8
-
         ramCard.addView(
             ramValue,
-            ramValueParams
+            LinearLayout.LayoutParams(
+                LinearLayout.LayoutParams.MATCH_PARENT,
+                50
+            )
         )
 
         val ramSeek = SeekBar(this)
@@ -165,58 +190,85 @@ class SettingsActivity : AppCompatActivity() {
 
                 override fun onStartTrackingTouch(
                     seekBar: SeekBar?
-                ) {}
+                ) {
+                }
 
                 override fun onStopTrackingTouch(
                     seekBar: SeekBar?
-                ) {}
+                ) {
+                }
             }
         )
 
-        ramCard.addView(ramSeek)
+        ramCard.addView(
+            ramSeek,
+            LinearLayout.LayoutParams(
+                LinearLayout.LayoutParams.MATCH_PARENT,
+                55
+            )
+        )
 
         val ramInfo = TextView(this)
 
-        ramInfo.text = "Рекомендуется: 2–4 ГБ"
+        ramInfo.text = "Доступно: 1–8 ГБ"
         ramInfo.textSize = 11f
         ramInfo.setTextColor(gray)
         ramInfo.gravity = Gravity.CENTER
 
-        ramCard.addView(ramInfo)
+        ramCard.addView(
+            ramInfo,
+            LinearLayout.LayoutParams(
+                LinearLayout.LayoutParams.MATCH_PARENT,
+                30
+            )
+        )
 
         root.addView(
             ramCard,
             cardParams()
         )
 
-        // Версия
+        // =========================
+        // MINECRAFT
+        // =========================
+
         val versionCard = createCard()
 
-        val versionTitle = createLabel("ВЕРСИЯ ИГРЫ")
-
-        versionCard.addView(versionTitle)
+        versionCard.addView(
+            createLabel("ВЕРСИЯ ИГРЫ")
+        )
 
         val version = TextView(this)
 
         version.text = "Minecraft Java Edition\n1.16.5"
-        version.textSize = 17f
+        version.textSize = 18f
         version.setTextColor(white)
-        version.setGravity(Gravity.CENTER)
-        version.setPadding(0, 12, 0, 12)
+        version.gravity = Gravity.CENTER
+        version.setPadding(0, 14, 0, 14)
 
-        versionCard.addView(version)
+        versionCard.addView(
+            version,
+            LinearLayout.LayoutParams(
+                LinearLayout.LayoutParams.MATCH_PARENT,
+                75
+            )
+        )
 
         root.addView(
             versionCard,
             cardParams()
         )
 
-        // Кнопка сохранения
+        // =========================
+        // СОХРАНИТЬ
+        // =========================
+
         val saveButton = Button(this)
 
         saveButton.text = "СОХРАНИТЬ"
         saveButton.textSize = 15f
         saveButton.setTextColor(Color.WHITE)
+
         saveButton.background = roundedBackground(
             red,
             16
@@ -235,11 +287,11 @@ class SettingsActivity : AppCompatActivity() {
         }
 
         val saveParams = LinearLayout.LayoutParams(
-            -1,
-            60
+            LinearLayout.LayoutParams.MATCH_PARENT,
+            62
         )
 
-        saveParams.topMargin = 18
+        saveParams.topMargin = 20
 
         root.addView(
             saveButton,
@@ -249,44 +301,56 @@ class SettingsActivity : AppCompatActivity() {
         // Версия лаунчера
         val launcherVersion = TextView(this)
 
-        launcherVersion.text = "BLOODMOON LAUNCHER • v0.1"
+        launcherVersion.text =
+            "BLOODMOON LAUNCHER • v0.1"
+
         launcherVersion.textSize = 10f
         launcherVersion.setTextColor(
             Color.rgb(80, 65, 70)
         )
         launcherVersion.gravity = Gravity.CENTER
 
-        val launcherVersionParams = LinearLayout.LayoutParams(
-            -1,
-            35
+        val versionParams = LinearLayout.LayoutParams(
+            LinearLayout.LayoutParams.MATCH_PARENT,
+            40
         )
 
-        launcherVersionParams.topMargin = 8
+        versionParams.topMargin = 8
 
         root.addView(
             launcherVersion,
-            launcherVersionParams
+            versionParams
         )
 
-        setContentView(root)
+        setContentView(scroll)
     }
 
     private fun createCard(): LinearLayout {
 
-        val layout = LinearLayout(this)
+        val cardLayout = LinearLayout(this)
 
-        layout.orientation = LinearLayout.VERTICAL
-        layout.setPadding(18, 16, 18, 16)
+        cardLayout.orientation =
+            LinearLayout.VERTICAL
 
-        layout.background = roundedBackground(
-            card,
+        cardLayout.setPadding(
+            18,
+            18,
+            18,
             18
         )
 
-        return layout
+        cardLayout.background =
+            roundedBackground(
+                card,
+                18
+            )
+
+        return cardLayout
     }
 
-    private fun createLabel(text: String): TextView {
+    private fun createLabel(
+        text: String
+    ): TextView {
 
         val label = TextView(this)
 
@@ -297,10 +361,11 @@ class SettingsActivity : AppCompatActivity() {
         return label
     }
 
-    private fun cardParams(): LinearLayout.LayoutParams {
+    private fun cardParams():
+            LinearLayout.LayoutParams {
 
         val params = LinearLayout.LayoutParams(
-            -1,
+            LinearLayout.LayoutParams.MATCH_PARENT,
             LinearLayout.LayoutParams.WRAP_CONTENT
         )
 
@@ -317,7 +382,8 @@ class SettingsActivity : AppCompatActivity() {
         val drawable = GradientDrawable()
 
         drawable.setColor(color)
-        drawable.cornerRadius = radius.toFloat()
+        drawable.cornerRadius =
+            radius.toFloat()
 
         return drawable
     }
