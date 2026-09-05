@@ -18,12 +18,6 @@
         android:contentDescription="Blood Moon"
         android:scaleType="fitCenter" />
 
-    <!-- Кровавый туман и частицы -->
-
-    <com.bloodmoon.launcher.BloodParticlesView
-        android:layout_width="match_parent"
-        android:layout_height="match_parent" />
-
     <!-- Центральный интерфейс -->
 
     <LinearLayout
