@@ -5,12 +5,7 @@ import android.graphics.Color
 import android.graphics.drawable.GradientDrawable
 import android.os.Bundle
 import android.view.Gravity
-import android.widget.Button
-import android.widget.EditText
-import android.widget.LinearLayout
-import android.widget.ScrollView
-import android.widget.SeekBar
-import android.widget.TextView
+import android.widget.*
 import androidx.appcompat.app.AppCompatActivity
 
 class SettingsActivity : AppCompatActivity() {
@@ -25,9 +20,9 @@ class SettingsActivity : AppCompatActivity() {
             Context.MODE_PRIVATE
         )
 
-        val scrollView = ScrollView(this)
+        val scroll = ScrollView(this)
 
-        scrollView.setBackgroundColor(
+        scroll.setBackgroundColor(
             Color.rgb(5, 3, 8)
         )
 
@@ -36,9 +31,12 @@ class SettingsActivity : AppCompatActivity() {
         root.orientation = LinearLayout.VERTICAL
         root.setPadding(24, 30, 24, 30)
 
-        scrollView.addView(root)
+        scroll.addView(root)
 
-        // Заголовок
+        // =========================
+        // ЗАГОЛОВОК
+        // =========================
+
         val title = TextView(this)
 
         title.text = "BLOODMOON"
@@ -50,42 +48,30 @@ class SettingsActivity : AppCompatActivity() {
 
         root.addView(
             title,
-            LinearLayout.LayoutParams(
-                -1,
-                60
-            )
+            params(-1, 60)
         )
 
-        // Подзаголовок
         val subtitle = TextView(this)
 
         subtitle.text = "НАСТРОЙКИ ЛАУНЧЕРА"
         subtitle.textSize = 12f
         subtitle.setTextColor(
-            Color.rgb(160, 150, 155)
+            Color.rgb(150, 140, 145)
         )
         subtitle.gravity = Gravity.CENTER
 
         root.addView(
             subtitle,
-            LinearLayout.LayoutParams(
-                -1,
-                40
-            )
+            params(-1, 40)
         )
 
+        // =========================
         // ПРОФИЛЬ
-        val profileTitle = TextView(this)
-
-        profileTitle.text = "ПРОФИЛЬ"
-        profileTitle.textSize = 13f
-        profileTitle.setTextColor(
-            Color.rgb(160, 150, 155)
-        )
+        // =========================
 
         root.addView(
-            profileTitle,
-            marginParams(50)
+            sectionTitle("ПРОФИЛЬ"),
+            marginParams(45)
         )
 
         val nickname = EditText(this)
@@ -93,11 +79,18 @@ class SettingsActivity : AppCompatActivity() {
         nickname.hint = "Введите никнейм"
         nickname.textSize = 17f
         nickname.setSingleLine(true)
+
         nickname.setTextColor(Color.WHITE)
         nickname.setHintTextColor(
-            Color.rgb(100, 90, 95)
+            Color.rgb(90, 80, 85)
         )
-        nickname.setPadding(18, 0, 18, 0)
+
+        nickname.setPadding(
+            18,
+            0,
+            18,
+            0
+        )
 
         nickname.background = rounded(
             Color.rgb(25, 10, 17),
@@ -113,18 +106,13 @@ class SettingsActivity : AppCompatActivity() {
             marginParams(60)
         )
 
+        // =========================
         // ОЗУ
-        val ramTitle = TextView(this)
-
-        ramTitle.text = "ОПЕРАТИВНАЯ ПАМЯТЬ"
-        ramTitle.textSize = 13f
-        ramTitle.setTextColor(
-            Color.rgb(160, 150, 155)
-        )
+        // =========================
 
         root.addView(
-            ramTitle,
-            marginParams(50)
+            sectionTitle("ОПЕРАТИВНАЯ ПАМЯТЬ"),
+            marginParams(45)
         )
 
         val ramValue = TextView(this)
@@ -142,10 +130,7 @@ class SettingsActivity : AppCompatActivity() {
 
         root.addView(
             ramValue,
-            LinearLayout.LayoutParams(
-                -1,
-                45
-            )
+            params(-1, 45)
         )
 
         val ramSeek = SeekBar(this)
@@ -188,51 +173,133 @@ class SettingsActivity : AppCompatActivity() {
             marginParams(55)
         )
 
-        // Версия Minecraft
-        val gameTitle = TextView(this)
-
-        gameTitle.text = "ВЕРСИЯ ИГРЫ"
-        gameTitle.textSize = 13f
-        gameTitle.setTextColor(
-            Color.rgb(160, 150, 155)
-        )
+        // =========================
+        // RENDERER
+        // =========================
 
         root.addView(
-            gameTitle,
+            sectionTitle("ГРАФИЧЕСКИЙ РЕНДЕРЕР"),
             marginParams(50)
         )
 
-        val gameVersion = TextView(this)
+        val rendererValue = TextView(this)
 
-        gameVersion.text =
+        val savedRenderer = prefs.getString(
+            "renderer",
+            "Holy GL4ES"
+        ) ?: "Holy GL4ES"
+
+        rendererValue.text =
+            "ТЕКУЩИЙ: $savedRenderer"
+
+        rendererValue.textSize = 14f
+
+        rendererValue.setTextColor(
+            Color.rgb(215, 25, 53)
+        )
+
+        rendererValue.gravity = Gravity.CENTER
+
+        root.addView(
+            rendererValue,
+            marginParams(45)
+        )
+
+        // Кнопки рендереров
+
+        val renderers = listOf(
+            "Holy GL4ES",
+            "GL4ES",
+            "Zink",
+            "LTW"
+        )
+
+        for (renderer in renderers) {
+
+            val button = Button(this)
+
+            button.text = renderer
+            button.textSize = 15f
+            button.setTextColor(Color.WHITE)
+
+            button.background = rounded(
+                if (renderer == savedRenderer) {
+                    Color.rgb(150, 12, 35)
+                } else {
+                    Color.rgb(30, 12, 20)
+                },
+                16
+            )
+
+            button.setOnClickListener {
+
+                prefs.edit()
+                    .putString(
+                        "renderer",
+                        renderer
+                    )
+                    .apply()
+
+                rendererValue.text =
+                    "ТЕКУЩИЙ: $renderer"
+
+                Toast.makeText(
+                    this,
+                    "Рендерер: $renderer",
+                    Toast.LENGTH_SHORT
+                ).show()
+            }
+
+            root.addView(
+                button,
+                marginParams(58)
+            )
+        }
+
+        // =========================
+        // ВЕРСИЯ MINECRAFT
+        // =========================
+
+        root.addView(
+            sectionTitle("ВЕРСИЯ ИГРЫ"),
+            marginParams(50)
+        )
+
+        val version = TextView(this)
+
+        version.text =
             "Minecraft Java Edition\n1.16.5"
 
-        gameVersion.textSize = 18f
-        gameVersion.setTextColor(Color.WHITE)
-        gameVersion.gravity = Gravity.CENTER
-        gameVersion.background = rounded(
+        version.textSize = 18f
+        version.setTextColor(Color.WHITE)
+        version.gravity = Gravity.CENTER
+
+        version.background = rounded(
             Color.rgb(18, 7, 13),
             16
         )
 
         root.addView(
-            gameVersion,
+            version,
             marginParams(85)
         )
 
-        // Кнопка
-        val saveButton = Button(this)
+        // =========================
+        // СОХРАНИТЬ
+        // =========================
 
-        saveButton.text = "СОХРАНИТЬ"
-        saveButton.textSize = 15f
-        saveButton.setTextColor(Color.WHITE)
+        val save = Button(this)
 
-        saveButton.background = rounded(
+        save.text = "СОХРАНИТЬ"
+        save.textSize = 15f
+        save.setTextColor(Color.WHITE)
+
+        save.background = rounded(
             Color.rgb(170, 15, 42),
             16
         )
 
-        saveButton.setOnClickListener {
+        save.setOnClickListener {
 
             prefs.edit()
                 .putString(
@@ -241,31 +308,70 @@ class SettingsActivity : AppCompatActivity() {
                 )
                 .apply()
 
+            Toast.makeText(
+                this,
+                "Настройки сохранены",
+                Toast.LENGTH_SHORT
+            ).show()
+
             finish()
         }
 
         root.addView(
-            saveButton,
+            save,
             marginParams(65)
         )
 
-        val versionText = TextView(this)
+        // =========================
+        // ВЕРСИЯ ЛАУНЧЕРА
+        // =========================
 
-        versionText.text =
+        val launcherVersion = TextView(this)
+
+        launcherVersion.text =
             "BLOODMOON LAUNCHER • v0.1"
 
-        versionText.textSize = 10f
-        versionText.setTextColor(
+        launcherVersion.textSize = 10f
+
+        launcherVersion.setTextColor(
             Color.rgb(80, 65, 70)
         )
-        versionText.gravity = Gravity.CENTER
+
+        launcherVersion.gravity = Gravity.CENTER
 
         root.addView(
-            versionText,
+            launcherVersion,
             marginParams(40)
         )
 
-        setContentView(scrollView)
+        setContentView(scroll)
+    }
+
+    private fun sectionTitle(
+        text: String
+    ): TextView {
+
+        val view = TextView(this)
+
+        view.text = text
+        view.textSize = 13f
+
+        view.setTextColor(
+            Color.rgb(160, 150, 155)
+        )
+
+        return view
+    }
+
+    private fun params(
+        width: Int,
+        height: Int
+    ): LinearLayout.LayoutParams {
+
+        return LinearLayout.LayoutParams(
+            width,
+            height
+        )
     }
 
     private fun marginParams(
@@ -277,7 +383,7 @@ class SettingsActivity : AppCompatActivity() {
             height
         )
 
-        params.topMargin = 14
+        params.topMargin = 12
 
         return params
     }
@@ -290,7 +396,9 @@ class SettingsActivity : AppCompatActivity() {
         val drawable = GradientDrawable()
 
         drawable.setColor(color)
-        drawable.cornerRadius = radius.toFloat()
+
+        drawable.cornerRadius =
+            radius.toFloat()
 
         return drawable
     }
