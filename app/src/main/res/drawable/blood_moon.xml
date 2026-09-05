@@ -1,0 +1,64 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<layer-list xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <!-- Большое красное свечение -->
+    <item
+        android:left="25dp"
+        android:top="25dp"
+        android:right="25dp"
+        android:bottom="25dp">
+
+        <shape android:shape="oval">
+            <gradient
+                android:type="radial"
+                android:centerX="50%"
+                android:centerY="50%"
+                android:gradientRadius="50%"
+                android:startColor="#80FF102E"
+                android:centerColor="#30B00020"
+                android:endColor="#00000000" />
+        </shape>
+
+    </item>
+
+    <!-- Свечение вокруг Луны -->
+    <item
+        android:left="65dp"
+        android:top="65dp"
+        android:right="65dp"
+        android:bottom="65dp">
+
+        <shape android:shape="oval">
+            <solid android:color="#45130A16" />
+        </shape>
+
+    </item>
+
+    <!-- Сама Луна -->
+    <item
+        android:left="90dp"
+        android:top="90dp"
+        android:right="90dp"
+        android:bottom="90dp">
+
+        <shape android:shape="oval">
+
+            <gradient
+                android:type="radial"
+                android:centerX="35%"
+                android:centerY="30%"
+                android:gradientRadius="70%"
+                android:startColor="#FF667070"
+                android:centerColor="#FF9B182A"
+                android:endColor="#FF3B0610" />
+
+            <stroke
+                android:width="3dp"
+                android:color="#D9273F" />
+
+        </shape>
+
+    </item>
+
+</layer-list>
