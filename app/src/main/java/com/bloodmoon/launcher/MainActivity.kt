@@ -3,6 +3,7 @@ package com.bloodmoon.launcher
 import android.animation.ObjectAnimator
 import android.animation.PropertyValuesHolder
 import android.animation.ValueAnimator
+import android.content.Intent
 import android.os.Bundle
 import android.view.animation.AccelerateDecelerateInterpolator
 import android.widget.Button
@@ -25,7 +26,7 @@ class MainActivity : AppCompatActivity() {
         val playButton = findViewById<Button>(R.id.playButton)
         val settingsButton = findViewById<Button>(R.id.settingsButton)
 
-        // 🌑 Пульсация Луны
+        // 🌑 Пульсация кровавой Луны
         moonPulse = ObjectAnimator.ofFloat(
             moon,
             "alpha",
@@ -53,7 +54,7 @@ class MainActivity : AppCompatActivity() {
             start()
         }
 
-        // 🔴 Пульсация кнопки
+        // 🔴 Пульсация кнопки ИГРАТЬ
         buttonPulse = ObjectAnimator.ofPropertyValuesHolder(
             playButton,
             PropertyValuesHolder.ofFloat(
@@ -88,15 +89,17 @@ class MainActivity : AppCompatActivity() {
         // ⚙ НАСТРОЙКИ
         settingsButton.setOnClickListener {
 
-            Toast.makeText(
+            val intent = Intent(
                 this,
-                "Настройки пока недоступны",
-                Toast.LENGTH_SHORT
-            ).show()
+                SettingsActivity::class.java
+            )
+
+            startActivity(intent)
         }
     }
 
     override fun onDestroy() {
+
         moonPulse?.cancel()
         moonFloat?.cancel()
         buttonPulse?.cancel()
