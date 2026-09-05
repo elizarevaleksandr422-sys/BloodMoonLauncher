@@ -1,0 +1,76 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<FrameLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@drawable/bg_launcher">
+
+    <!-- Центральная часть -->
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:orientation="vertical"
+        android:gravity="center"
+        android:padding="28dp">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="BLOODMOON"
+            android:textColor="#D71935"
+            android:textSize="38sp"
+            android:textStyle="bold"
+            android:letterSpacing="0.08"
+            android:shadowColor="#FF001F"
+            android:shadowDx="0"
+            android:shadowDy="0"
+            android:shadowRadius="18" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="4dp"
+            android:text="MINECRAFT 1.16.5"
+            android:textColor="#B8AEB3"
+            android:textSize="13sp"
+            android:letterSpacing="0.15" />
+
+        <Button
+            android:id="@+id/playButton"
+            android:layout_width="260dp"
+            android:layout_height="65dp"
+            android:layout_marginTop="55dp"
+            android:text="ИГРАТЬ"
+            android:textColor="#FFFFFF"
+            android:textSize="17sp"
+            android:textStyle="bold"
+            android:backgroundTint="#9E1028"
+            android:elevation="10dp" />
+
+        <Button
+            android:id="@+id/settingsButton"
+            android:layout_width="260dp"
+            android:layout_height="55dp"
+            android:layout_marginTop="12dp"
+            android:text="НАСТРОЙКИ"
+            android:textColor="#D8D0D3"
+            android:textSize="14sp"
+            android:backgroundTint="#241018" />
+
+    </LinearLayout>
+
+    <!-- Версия -->
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="bottom|center_horizontal"
+        android:layout_marginBottom="20dp"
+        android:text="BLOODMOON LAUNCHER • v0.1"
+        android:textColor="#665960"
+        android:textSize="11sp" />
+
+</FrameLayout>
