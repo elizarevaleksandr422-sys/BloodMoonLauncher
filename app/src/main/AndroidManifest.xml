@@ -9,10 +9,17 @@
         android:roundIcon="@drawable/bloodmoon_icon"
         android:theme="@style/Theme.BloodMoon">
 
+        <!-- Экран запуска Minecraft -->
+        <activity
+            android:name=".GameActivity"
+            android:exported="false" />
+
+        <!-- Настройки -->
         <activity
             android:name=".SettingsActivity"
             android:exported="false" />
 
+        <!-- Главный экран -->
         <activity
             android:name=".MainActivity"
             android:exported="true">
