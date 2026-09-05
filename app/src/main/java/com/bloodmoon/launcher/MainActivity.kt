@@ -20,8 +20,8 @@ class MainActivity : AppCompatActivity() {
         val playButton = findViewById<Button>(R.id.playButton)
         val settingsButton = findViewById<Button>(R.id.settingsButton)
 
-        // Плавное пульсирование кровавой Луны
-        val pulse = ObjectAnimator.ofFloat(
+        // 🌑 Пульсация Луны
+        val moonPulse = ObjectAnimator.ofFloat(
             moon,
             "alpha",
             0.82f,
@@ -29,13 +29,13 @@ class MainActivity : AppCompatActivity() {
             0.82f
         )
 
-        pulse.duration = 3000
-        pulse.repeatCount = ValueAnimator.INFINITE
-        pulse.interpolator = AccelerateDecelerateInterpolator()
-        pulse.start()
+        moonPulse.duration = 3000
+        moonPulse.repeatCount = ValueAnimator.INFINITE
+        moonPulse.interpolator = AccelerateDecelerateInterpolator()
+        moonPulse.start()
 
-        // Небольшое медленное движение Луны
-        val floatAnimation = ObjectAnimator.ofFloat(
+        // 🌑 Медленное движение Луны
+        val moonFloat = ObjectAnimator.ofFloat(
             moon,
             "translationY",
             -6f,
@@ -43,23 +43,69 @@ class MainActivity : AppCompatActivity() {
             -6f
         )
 
-        floatAnimation.duration = 5000
-        floatAnimation.repeatCount = ValueAnimator.INFINITE
-        floatAnimation.interpolator = AccelerateDecelerateInterpolator()
-        floatAnimation.start()
+        moonFloat.duration = 5000
+        moonFloat.repeatCount = ValueAnimator.INFINITE
+        moonFloat.interpolator = AccelerateDecelerateInterpolator()
+        moonFloat.start()
 
+        // 🔴 Пульсация кнопки ИГРАТЬ
+        val buttonPulse = ObjectAnimator.ofPropertyValuesHolder(
+            playButton,
+            android.animation.PropertyValuesHolder.ofFloat(
+                "scaleX",
+                1.0f,
+                1.03f,
+                1.0f
+            ),
+            android.animation.PropertyValuesHolder.ofFloat(
+                "scaleY",
+                1.0f,
+                1.03f,
+                1.0f
+            ),
+            android.animation.PropertyValuesHolder.ofFloat(
+                "alpha",
+                0.88f,
+                1.0f,
+                0.88f
+            )
+        )
+
+        buttonPulse.duration = 1800
+        buttonPulse.repeatCount = ValueAnimator.INFINITE
+        buttonPulse.interpolator = AccelerateDecelerateInterpolator()
+        buttonPulse.start()
+
+        // ▶️ Нажатие ИГРАТЬ
         playButton.setOnClickListener {
-            Toast.makeText(
-                this,
-                "Запуск Minecraft 1.16.5...",
-                Toast.LENGTH_SHORT
-            ).show()
+
+            playButton.animate()
+                .scaleX(0.94f)
+                .scaleY(0.94f)
+                .setDuration(100)
+                .withEndAction {
+
+                    playButton.animate()
+                        .scaleX(1.0f)
+                        .scaleY(1.0f)
+                        .setDuration(150)
+                        .start()
+
+                    Toast.makeText(
+                        this,
+                        "Запуск Minecraft 1.16.5...",
+                        Toast.LENGTH_SHORT
+                    ).show()
+                }
+                .start()
         }
 
+        // ⚙️ Настройки
         settingsButton.setOnClickListener {
+
             Toast.makeText(
                 this,
-                "Настройки скоро будут доступны",
+                "Настройки BloodMoon",
                 Toast.LENGTH_SHORT
             ).show()
         }
